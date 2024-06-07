@@ -1,77 +1,25 @@
-"use client";
-import React, { useState } from "react";
-import {
-    motion,
-    AnimatePresence,
-    useScroll,
-    useMotionValueEvent,
-} from "framer-motion";
-import { cn } from "@/utils/cn";
-import Link from "next/link";
+// @flow
+import * as React from 'react';
 
-export const NavBar = ({
-                                navItems,
-                                className,
-                            }: {
-    navItems: {
-        name: string;
-        link: string;
-        icon?: JSX.Element;
-    }[];
-    className?: string;
-}) => {
-    const { scrollYProgress } = useScroll();
-
-    const [visible, setVisible] = useState(false);
-
-    useMotionValueEvent(scrollYProgress, "change", (current) => {
-        // Check if current is not undefined and is a number
-        if (typeof current === "number") {
-            let direction = current! - scrollYProgress.getPrevious()!;
-
-            if (scrollYProgress.get() < 0.05) {
-                setVisible(false);
-            } else {
-                if (direction < 0) {
-                    setVisible(true);
-                } else {
-                    setVisible(false);
-                }
-            }
-        }
-    });
-
+export const NavBar = () => {
     return (
-        <AnimatePresence mode="wait">
-            <motion.div
-                initial={{
-                    opacity: 1,
-                    y: -100,
-                }}
-                animate={{
-                    y: visible ? 0 : -100,
-                    opacity: visible ? 1 : 0,
-                }}
-                transition={{
-                    duration: 0.2,
-                }}
-                className={cn(
-                    "flex max-w-fit px-5 py-5 fixed top-10 inset-x-0 mx-auto border border-transparent dark:border-white/[0.2] rounded-full dark:bg-black bg-white shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-[5000]  items-center justify-center space-x-4",
-                    className
-                )}
-            >
-                {navItems.map((navItem: any, idx: number) => (
-                    <Link
-                        key={`link=${idx}`}
-                        href={navItem.link}
-                        className={cn(
-                            "relative  items-center flex space-x-1 text-neutral-50 hover:text-neutral-500"
-                        )}
-                    >
-                        <span className="block text-sm">{navItem.name}</span>
-                    </Link>
-                ))}
-            </motion.div>
-        </AnimatePresence>
+        <header className="fixed z-50 top-0 bg-black grid items-center grid-cols-3 w-full pt-5 p-2 mb-10 h-fit">
+            <h1 className="font-bold text-5xl text-white">Dilan <br/> Fitness</h1>
+            <nav className="mx-auto hidden md:flex flex-row gap-5 text-white">
+                <a href="#" className="text-xl font-bold hover:text-neutral-500">Home</a>
+                <a href="#" className="text-xl font-bold hover:text-neutral-500">About</a>
+                <a href="#" className="text-xl font-bold hover:text-neutral-500">Membership</a>
+                <a href="#" className="text-xl font-bold hover:text-neutral-500">Contact</a>
+            </nav>
+            <div className="absolute hidden md:flex right-5 top-[3rem] flex-row items-center gap-5">
+            <div className="flex gap-3 items-center">
+                    <a href="/login" className="text-red-500 font-bold text-xl hover:text-red-600">Login</a>
+                    <a href="/sign-up" className="bg-red-500 px-3 py-1 rounded-full text-white font-bold text-xl hover:bg-red-600">SignUp</a>
+                </div>
+                <button>
+                    <img src="/cart.svg" alt="cart" width={30}/>
+                </button>
+            </div>
+        </header>
     );
 };
